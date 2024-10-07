@@ -1,0 +1,43 @@
+---
+- hosts: all
+  become: yes
+  ignore_errors: yes
+  gather_facts: yes
+
+  tasks:
+      - name: create a file
+        file:
+          path: /tmp/playbookfile
+          mode: '0755'
+          state: touch
+        tags: file
+
+      - name: Check something
+        shell: gyfyghghihi 
+        tags: cmd 
+        
+      - name: Create a directory
+        file:
+          path: /tmp/dir
+          state: directory
+          mode: '0700'
+        tags: dir
+
+      - name: Create a group security
+        group:
+          name: security
+          state: present
+
+      - name: Create  user 'marc' 
+        user:
+          name: marc
+          comment: marc bruno
+          uid: 1040
+          group: security  
+          shell: /bin/bash 
+        when: (ansible_os_family == "Debian") or (ansible_processor_nproc > 2)
+        
+      - name: check uptime
+        command: uptime
+      - name: check the date
+        shell: cat /etc/passwd | grep marc   
